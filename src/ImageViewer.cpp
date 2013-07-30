@@ -17,7 +17,7 @@ static const char* imageviewer_spec[] =
     "type_name",         "ImageViewer",
     "description",       "Image Viewer Component for common camera interface",
     "version",           "1.0.0",
-    "vendor",            "Kenichi Ohara, Osaka University",
+    "vendor",            "Kenichi Ohara, Meijo University",
     "category",          "Image Process",
     "activity_type",     "PERIODIC",
     "kind",              "DataFlowComponent",
