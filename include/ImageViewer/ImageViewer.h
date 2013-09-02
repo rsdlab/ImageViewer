@@ -30,8 +30,8 @@
 
 // </rtc-template>
 
-#include <opencv/cv.h>
-#include <opencv/highgui.h>
+//Include file for OpenCV functions
+#include <opencv2/opencv.h>
 
 using namespace RTC;
 
