@@ -1,7 +1,7 @@
 // -*- C++ -*-
 /*!
  * @file  ImageViewer.cpp
- * @brief Image Viewer Component for common camera interface
+ * @brief Image Viewer Component with common camera interface and image compression function
  * @date $Date$
  *
  * $Id$
@@ -15,9 +15,9 @@ static const char* imageviewer_spec[] =
   {
     "implementation_id", "ImageViewer",
     "type_name",         "ImageViewer",
-    "description",       "Image Viewer Component for common camera interface",
+    "description",       "Image Viewer Component with common camera interface and image compression function",
     "version",           "1.0.0",
-    "vendor",            "Kenichi Ohara, Meijo University",
+    "vendor",            "Kenichi Ohara, Osaka Univ.",
     "category",          "Image Process",
     "activity_type",     "PERIODIC",
     "kind",              "DataFlowComponent",
@@ -45,13 +45,6 @@ ImageViewer::ImageViewer(RTC::Manager* manager)
 
     // </rtc-template>
 {
-  //Initialize varuables
-  image				= NULL;
-  width				= 0;
-  height			= 0;
-  channels			= 0;
-  connection_check  = NULL;
-  saved_image_counter= 0;
 }
 
 /*!
@@ -60,6 +53,8 @@ ImageViewer::ImageViewer(RTC::Manager* manager)
 ImageViewer::~ImageViewer()
 {
 }
+
+
 
 RTC::ReturnCode_t ImageViewer::onInitialize()
 {
@@ -83,8 +78,8 @@ RTC::ReturnCode_t ImageViewer::onInitialize()
   // <rtc-template block="bind_config">
   // Bind variables and configuration variable
   bindParameter("capture_frame_num", m_capture_frame_num, "0");
-  
   // </rtc-template>
+  
   return RTC::RTC_OK;
 }
 
@@ -108,6 +103,7 @@ RTC::ReturnCode_t ImageViewer::onShutdown(RTC::UniqueId ec_id)
   return RTC::RTC_OK;
 }
 */
+
 
 RTC::ReturnCode_t ImageViewer::onActivated(RTC::UniqueId ec_id)
 {
@@ -195,49 +191,78 @@ RTC::ReturnCode_t ImageViewer::onExecute(RTC::UniqueId ec_id)
   //Inport data check
   if(m_ImageIn.isNew())
   {
-	m_ImageIn.read();
-	std::cerr<< "tm.sec " << m_Image.tm.sec << std::endl;
-	std::cerr<< "tm.nsec " << m_Image.tm.nsec << std::endl;
-	
-	width = m_Image.data.image.width;
-	height = m_Image.data.image.height;
-	channels = (m_Image.data.image.format == Img::CF_GRAY) ? 1 :
+		m_ImageIn.read();
+    		
+		width = m_Image.data.image.width;
+		height = m_Image.data.image.height;
+		channels = (m_Image.data.image.format == Img::CF_GRAY) ? 1 :
 			   (m_Image.data.image.format == Img::CF_RGB) ? 3 :
 			   (m_Image.data.image.raw_data.length()/width/height);
-	RTC_TRACE(("Capture image size %d x %d", width, height));
-	RTC_TRACE(("Channels %d", channels));
-	
-	if(channels == 3)
+		RTC_TRACE(("Capture image size %d x %d", width, height));
+		RTC_TRACE(("Channels %d", channels));
+		
+		if(channels == 3)
       image.create(height, width, CV_8UC3);
-	else
+		else
       image.create(height, width, CV_8UC1);
 
-    for(int i=0; i<height; ++i)
-	  memcpy(&image.data[i*image.step],&m_Image.data.image.raw_data[i*width*channels],sizeof(unsigned char)*width*channels);
-	
-	std::cerr<< "Intrinsic matrix elements: " << std::endl;
-	for(int i=0; i<5; ++i)
-	{
-	  std::cerr<< m_Image.data.intrinsic.matrix_element[i] << " " ;
-	  RTC_TRACE(("Intrinsic matrix element[%d] %f",i, m_Image.data.intrinsic.matrix_element[i]));
+		/*
+		std::cerr<< "Intrinsic matrix elements: " << std::endl;
+		for(int i=0; i<5; ++i)
+		{
+			std::cerr<< m_Image.data.intrinsic.matrix_element[i] << " " ;
+			RTC_TRACE(("Intrinsic matrix element[%d] %f",i, m_Image.data.intrinsic.matrix_element[i]));
     }
-	std::cerr << std::endl;
-
-	std::cerr << "Distortion Parameters" << std::endl;
+		std::cerr << std::endl;
+		
+		std::cerr << "Distortion Parameters" << std::endl;
     for(unsigned int i=0; i<m_Image.data.intrinsic.distortion_coefficient.length(); ++i)
-	{
-	  std::cerr << m_Image.data.intrinsic.distortion_coefficient[i] << " , ";
-	  RTC_TRACE(("Distortion parameter[%d] %f", i, m_Image.data.intrinsic.distortion_coefficient[i]));
+		{
+			std::cerr << m_Image.data.intrinsic.distortion_coefficient[i] << " , ";
+			RTC_TRACE(("Distortion parameter[%d] %f", i, m_Image.data.intrinsic.distortion_coefficient[i]));
     }
-	std::cerr << std::endl;
+		std::cerr << std::endl;
+		*/
 
-	if(channels == 3)
-	  cv::cvtColor(image, image, CV_RGB2BGR);
+		long data_length = m_Image.data.image.raw_data.length();
+		long image_size = width * height * channels;
+
+		if( data_length == image_size )
+		{
+			for(int i=0; i<height; ++i)
+				memcpy(&image.data[i*image.step],&m_Image.data.image.raw_data[i*width*channels],sizeof(unsigned char)*width*channels);
+			if(channels == 3)
+				cv::cvtColor(image, image, CV_RGB2BGR);
+		}
+		else
+		{
+			std::vector<uchar> compressed_image = std::vector<uchar>(data_length);
+			memcpy(&compressed_image[0], &m_Image.data.image.raw_data[0], sizeof(unsigned char) * data_length);
+
+			//Decode received compressed image
+			cv::Mat decoded_image;
+			if(channels == 3)
+			{
+				decoded_image = cv::imdecode(cv::Mat(compressed_image), CV_LOAD_IMAGE_COLOR);
+				cv::cvtColor(decoded_image, image, CV_RGB2BGR);
+			}
+			else
+			{
+				decoded_image = cv::imdecode(cv::Mat(compressed_image), CV_LOAD_IMAGE_GRAYSCALE);
+				image = decoded_image;
+			}
+		}
   }
 
   //画像データが入っている場合は画像を表示
   if(!image.empty())
+	{
+		//Communication Time
+		coil::TimeValue tm(coil::gettimeofday());
+		std::cout<< "Communication Time: " << tm.usec() - (m_Image.tm.nsec / 1000) << "\r";
+
     cv::imshow("Image Window", image);
+	}
 
   char key = cv::waitKey(3);
 

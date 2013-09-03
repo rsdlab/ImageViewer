@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<rtc:RtcProfile rtc:version="0.2" rtc:id="RTC:Kenichi Ohara, Meijo University:Image Process:ImageViewer:1.0.0" xmlns:rtcExt="http://www.openrtp.org/namespaces/rtc_ext" xmlns:rtcDoc="http://www.openrtp.org/namespaces/rtc_doc" xmlns:rtc="http://www.openrtp.org/namespaces/rtc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <rtc:BasicInfo xsi:type="rtcExt:basic_info_ext" rtcExt:saveProject="ImageViewer" rtc:updateDate="2012-08-08T17:59:11+09:00" rtc:creationDate="2012-08-08T17:51:48+09:00" rtc:version="1.0.0" rtc:vendor="Kenichi Ohara, Osaka Univ." rtc:maxInstances="1" rtc:executionType="PeriodicExecutionContext" rtc:executionRate="30.0" rtc:description="Image Viewer Component for common camera interface" rtc:category="Image Process" rtc:componentKind="DataFlowComponent" rtc:activityType="PERIODIC" rtc:componentType="STATIC" rtc:name="ImageViewer">
+<rtc:RtcProfile rtc:version="0.2" rtc:id="RTC:Kenichi Ohara, Osaka Univ.:Image Process:ImageViewer:1.0.0" xmlns:rtcExt="http://www.openrtp.org/namespaces/rtc_ext" xmlns:rtcDoc="http://www.openrtp.org/namespaces/rtc_doc" xmlns:rtc="http://www.openrtp.org/namespaces/rtc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <rtc:BasicInfo xsi:type="rtcExt:basic_info_ext" rtcExt:saveProject="ImageViewer_compress" rtc:updateDate="2012-08-08T17:59:11+09:00" rtc:creationDate="2012-08-08T17:51:48+09:00" rtc:version="1.0.0" rtc:vendor="Kenichi Ohara, Osaka Univ." rtc:maxInstances="1" rtc:executionType="PeriodicExecutionContext" rtc:executionRate="30.0" rtc:description="Image Viewer Component with common camera interface and image compression function" rtc:category="Image Process" rtc:componentKind="DataFlowComponent" rtc:activityType="PERIODIC" rtc:componentType="STATIC" rtc:name="ImageViewer">
         <rtcExt:VersionUpLogs></rtcExt:VersionUpLogs>
     </rtc:BasicInfo>
     <rtc:Actions>
@@ -26,7 +26,7 @@
     </rtc:ConfigurationSet>
     <rtc:DataPorts xsi:type="rtcExt:dataport_ext" rtcExt:position="LEFT" rtcExt:variableName="" rtc:unit="" rtc:subscriptionType="" rtc:dataflowType="" rtc:interfaceType="" rtc:idlFile="" rtc:type="Img::TimedCameraImage" rtc:name="Image" rtc:portType="DataInPort"/>
     <rtc:ServicePorts xsi:type="rtcExt:serviceport_ext" rtcExt:position="LEFT" rtc:name="CameraCaptureService">
-        <rtc:ServiceInterface xsi:type="rtcExt:serviceinterface_ext" rtcExt:variableName="" rtc:path="C:\Program Files (x86)\OpenRTM-aist\1.1\rtm\idl" rtc:type="Img::CameraCaptureService" rtc:idlFile="C:\Program Files (x86)\OpenRTM-aist\1.1\rtm\idl\Img.idl" rtc:instanceName="" rtc:direction="Required" rtc:name="CameraCaptureService"/>
+        <rtc:ServiceInterface xsi:type="rtcExt:serviceinterface_ext" rtcExt:variableName="" rtc:path="C:\Program Files\OpenRTM-aist\1.1\rtm\idl" rtc:type="Img::CameraCaptureService" rtc:idlFile="C:\Program Files\OpenRTM-aist\1.1\rtm\idl\Img.idl" rtc:instanceName="" rtc:direction="Required" rtc:name="CameraCaptureService"/>
     </rtc:ServicePorts>
     <rtc:Language xsi:type="rtcExt:language_ext" rtc:kind="C++"/>
 </rtc:RtcProfile>

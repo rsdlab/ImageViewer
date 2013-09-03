@@ -1,7 +1,7 @@
 // -*- C++ -*-
 /*!
  * @file  ImageViewer.h
- * @brief Image Viewer Component for common camera interface
+ * @brief Image Viewer Component with common camera interface and image compression function
  * @date  $Date$
  *
  * $Id$
@@ -30,14 +30,18 @@
 
 // </rtc-template>
 
-//Include file for OpenCV functions
-#include <opencv2/opencv.h>
+//Include File for OpenCV functions
+#include <opencv2/opencv.hpp>
 
 using namespace RTC;
+using namespace Img;
+
+
+
 
 /*!
  * @class ImageViewer
- * @brief Image Viewer Component for common camera interface
+ * @brief Image Viewer Component with common camera interface and image compression function
  *
  */
 class ImageViewer
@@ -233,6 +237,7 @@ class ImageViewer
    * - DefaultValue: 0
    */
   int m_capture_frame_num;
+
   // </rtc-template>
 
   // DataInPort declaration
@@ -282,7 +287,6 @@ class ImageViewer
   int		width, height, channels, saved_image_counter;
   cv::Mat	image;
   bool		*connection_check;
-
 };
 
 
