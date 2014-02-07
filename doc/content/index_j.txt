@@ -109,7 +109,7 @@ capture_frame_num int                0
 =============== =========== ============================== ====
 ポート名        ポート型    データ型                       意味
 =============== =========== ============================== ====
-Image           InPort      RTC::Acceleration2D            
+Image           InPort      Img::TimedCameraImage          
 CameraCaptureService ServicePort Img::CameraCaptureService      
 =============== =========== ============================== ====
 

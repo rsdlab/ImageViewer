@@ -1,7 +1,7 @@
 // -*- C++ -*-
 /*!
  * @file  ImageViewer.cpp
- * @brief Image Viewer Component with common camera interface and image compression function
+ * @brief Image Viewer Component with common camera interface 2.0
  * @date $Date$
  *
  * $Id$
@@ -15,10 +15,10 @@ static const char* imageviewer_spec[] =
   {
     "implementation_id", "ImageViewer",
     "type_name",         "ImageViewer",
-    "description",       "Image Viewer Component with common camera interface and image compression function",
-    "version",           "1.0.0",
-    "vendor",            "Kenichi Ohara, Osaka Univ.",
-    "category",          "Image Process",
+    "description",       "Image Viewer Component with common camera interface 2.0",
+    "version",           "2.0.0",
+    "vendor",            "Kenichi Ohara, Meijo University",
+    "category",          "ImageProcessing",
     "activity_type",     "PERIODIC",
     "kind",              "DataFlowComponent",
     "max_instance",      "1",
@@ -182,59 +182,43 @@ RTC::ReturnCode_t ImageViewer::onDeactivated(RTC::UniqueId ec_id)
 
   //描画用画像メモリの解放
   image.release();
+
   return RTC::RTC_OK;
 }
 
 
 RTC::ReturnCode_t ImageViewer::onExecute(RTC::UniqueId ec_id)
 {
-  //Inport data check
-  if(m_ImageIn.isNew())
-  {
+	//Inport data check
+	if(m_ImageIn.isNew())
+	{
 		m_ImageIn.read();
     		
 		width = m_Image.data.image.width;
 		height = m_Image.data.image.height;
 		channels = (m_Image.data.image.format == Img::CF_GRAY) ? 1 :
-			   (m_Image.data.image.format == Img::CF_RGB) ? 3 :
+			   (m_Image.data.image.format == Img::CF_RGB || m_Image.data.image.format == Img::CF_PNG || m_Image.data.image.format == Img::CF_JPEG) ? 3 :
 			   (m_Image.data.image.raw_data.length()/width/height);
 		RTC_TRACE(("Capture image size %d x %d", width, height));
 		RTC_TRACE(("Channels %d", channels));
 		
 		if(channels == 3)
-      image.create(height, width, CV_8UC3);
+			image.create(height, width, CV_8UC3);
 		else
-      image.create(height, width, CV_8UC1);
-
-		/*
-		std::cerr<< "Intrinsic matrix elements: " << std::endl;
-		for(int i=0; i<5; ++i)
-		{
-			std::cerr<< m_Image.data.intrinsic.matrix_element[i] << " " ;
-			RTC_TRACE(("Intrinsic matrix element[%d] %f",i, m_Image.data.intrinsic.matrix_element[i]));
-    }
-		std::cerr << std::endl;
-		
-		std::cerr << "Distortion Parameters" << std::endl;
-    for(unsigned int i=0; i<m_Image.data.intrinsic.distortion_coefficient.length(); ++i)
-		{
-			std::cerr << m_Image.data.intrinsic.distortion_coefficient[i] << " , ";
-			RTC_TRACE(("Distortion parameter[%d] %f", i, m_Image.data.intrinsic.distortion_coefficient[i]));
-    }
-		std::cerr << std::endl;
-		*/
+			image.create(height, width, CV_8UC1);		
 
 		long data_length = m_Image.data.image.raw_data.length();
 		long image_size = width * height * channels;
 
-		if( data_length == image_size )
+		std::cout<<"ColorFormat"<<m_Image.data.image.format<<std::endl;
+		if( m_Image.data.image.format == Img::CF_RGB )
 		{
 			for(int i=0; i<height; ++i)
 				memcpy(&image.data[i*image.step],&m_Image.data.image.raw_data[i*width*channels],sizeof(unsigned char)*width*channels);
 			if(channels == 3)
 				cv::cvtColor(image, image, CV_RGB2BGR);
 		}
-		else
+		else if( m_Image.data.image.format == Img::CF_JPEG || m_Image.data.image.format == Img::CF_PNG )
 		{
 			std::vector<uchar> compressed_image = std::vector<uchar>(data_length);
 			memcpy(&compressed_image[0], &m_Image.data.image.raw_data[0], sizeof(unsigned char) * data_length);
@@ -256,13 +240,14 @@ RTC::ReturnCode_t ImageViewer::onExecute(RTC::UniqueId ec_id)
 
   //画像データが入っている場合は画像を表示
   if(!image.empty())
-	{
-		//Communication Time
+  {
+/*
+	  //Communication Time
 		coil::TimeValue tm(coil::gettimeofday());
 		std::cout<< "Communication Time: " << tm.usec() - (m_Image.tm.nsec / 1000) << "\r";
-
-    cv::imshow("Image Window", image);
-	}
+		*/
+		cv::imshow("Image Window", image);
+  }
 
   char key = cv::waitKey(3);
 
@@ -273,6 +258,7 @@ RTC::ReturnCode_t ImageViewer::onExecute(RTC::UniqueId ec_id)
     sprintf( file, "CapturedImage%03d.png",++saved_image_counter);
     cv::imwrite( file, image );
   }
+
   return RTC::RTC_OK;
 }
 

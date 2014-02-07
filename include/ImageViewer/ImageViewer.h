@@ -1,7 +1,7 @@
 // -*- C++ -*-
 /*!
  * @file  ImageViewer.h
- * @brief Image Viewer Component with common camera interface and image compression function
+ * @brief Image Viewer Component with common camera interface 2.0
  * @date  $Date$
  *
  * $Id$
@@ -36,12 +36,9 @@
 using namespace RTC;
 using namespace Img;
 
-
-
-
 /*!
  * @class ImageViewer
- * @brief Image Viewer Component with common camera interface and image compression function
+ * @brief Image Viewer Component with common camera interface 2.0
  *
  */
 class ImageViewer
@@ -287,6 +284,7 @@ class ImageViewer
   int		width, height, channels, saved_image_counter;
   cv::Mat	image;
   bool		*connection_check;
+
 };
 
 
