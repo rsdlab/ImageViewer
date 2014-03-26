@@ -210,7 +210,6 @@ RTC::ReturnCode_t ImageViewer::onExecute(RTC::UniqueId ec_id)
 		long data_length = m_Image.data.image.raw_data.length();
 		long image_size = width * height * channels;
 
-		std::cout<<"ColorFormat"<<m_Image.data.image.format<<std::endl;
 		if( m_Image.data.image.format == Img::CF_RGB )
 		{
 			for(int i=0; i<height; ++i)
