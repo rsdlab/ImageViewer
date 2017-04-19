@@ -1,6 +1,8 @@
 set(comp_srcs ImageViewer.cpp )
 set(standalone_srcs ImageViewerComp.cpp)
 
+cmake_policy(SET CMP0015 OLD)
+
 find_package(OpenCV REQUIRED)
 
 include_directories(${PROJECT_SOURCE_DIR}/include)
