@@ -1,4 +1,7 @@
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
+if(POLICY CMP0048)
+  cmake_policy(SET CMP0048 OLD)
+endif()
 
 project(ImageViewer)
 string(TOLOWER ${PROJECT_NAME} PROJECT_NAME_LOWER)
@@ -45,7 +48,7 @@ set(SHARE_INSTALL_DIR
     "components/share/${PROJECT_NAME_LOWER}-${PROJECT_VERSION_MAJOR}")
 
 # Get necessary dependency information
-find_package(OpenRTM)
+find_package(OpenRTM HINTS /usr/lib64/openrtm-1.1/cmake)
 if(${OpenRTM_FOUND})
   MESSAGE(STATUS "OpenRTM configuration Found")
 else(${OpenRTM_FOUND})

@@ -208,7 +208,7 @@ RTC::ReturnCode_t ImageViewer::onExecute(RTC::UniqueId ec_id)
 			image.create(height, width, CV_8UC1);		
 
 		long data_length = m_Image.data.image.raw_data.length();
-		long image_size = width * height * channels;
+		//long image_size = width * height * channels;
 
 		if( m_Image.data.image.format == Img::CF_RGB )
 		{

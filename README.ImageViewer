@@ -12,7 +12,7 @@
 #   --module-act-type=PERIODIC --module-max-inst=1 
 #   --config=capture_frame_num:int:0 
 #   --inport=Image:Img::TimedCameraImage 
-#   --consumer-idl=C:\Program Files\OpenRTM-aist\1.1\rtm\idl\Img.idl 
+#   --consumer-idl=/usr/include/openrtm-1.1/rtm/idl/Img.idl 
 #   --consumer=CameraCaptureService:CameraCaptureService:Img::CameraCaptureService 
 
 
