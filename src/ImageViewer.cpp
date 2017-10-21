@@ -210,7 +210,7 @@ RTC::ReturnCode_t ImageViewer::onExecute(RTC::UniqueId ec_id)
 		long data_length = m_Image.data.image.raw_data.length();
 		//long image_size = width * height * channels;
 
-		if( m_Image.data.image.format == Img::CF_RGB )
+		if( m_Image.data.image.format == Img::CF_RGB || m_Image.data.image.format == Img::CF_GRAY)
 		{
 			for(int i=0; i<height; ++i)
 				memcpy(&image.data[i*image.step],&m_Image.data.image.raw_data[i*width*channels],sizeof(unsigned char)*width*channels);
