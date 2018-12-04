@@ -215,7 +215,7 @@ RTC::ReturnCode_t ImageViewer::onExecute(RTC::UniqueId ec_id)
 			for(int i=0; i<height; ++i)
 				memcpy(&image.data[i*image.step],&m_Image.data.image.raw_data[i*width*channels],sizeof(unsigned char)*width*channels);
 			if(channels == 3)
-				cv::cvtColor(image, image, CV_RGB2BGR);
+			  cv::cvtColor(image, image, cv::COLOR_RGB2BGR/*CV_RGB2BGR*/);
 		}
 		else if( m_Image.data.image.format == Img::CF_JPEG || m_Image.data.image.format == Img::CF_PNG )
 		{
@@ -227,7 +227,8 @@ RTC::ReturnCode_t ImageViewer::onExecute(RTC::UniqueId ec_id)
 			if(channels == 3)
 			{
 				decoded_image = cv::imdecode(cv::Mat(compressed_image), CV_LOAD_IMAGE_COLOR);
-				cv::cvtColor(decoded_image, image, CV_RGB2BGR);
+				//cv::cvtColor(decoded_image, image, CV_RGB2BGR);
+				image = decoded_image;
 			}
 			else
 			{
