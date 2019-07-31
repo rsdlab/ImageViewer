@@ -153,7 +153,7 @@ RTC::ReturnCode_t ImageViewer::onActivated(RTC::UniqueId ec_id)
 	  }
   }
 
-  cv::namedWindow("Image Window", CV_WINDOW_AUTOSIZE);
+  cv::namedWindow("Image Window", cv::WINDOW_AUTOSIZE);
   std::cout << "Start image view" << std::endl;
   std::cout << "If you want to take a 1 shot image as image file, please push s on Captured Image Window!" << std::endl;
 
@@ -226,13 +226,13 @@ RTC::ReturnCode_t ImageViewer::onExecute(RTC::UniqueId ec_id)
 			cv::Mat decoded_image;
 			if(channels == 3)
 			{
-				decoded_image = cv::imdecode(cv::Mat(compressed_image), CV_LOAD_IMAGE_COLOR);
+			  decoded_image = cv::imdecode(cv::Mat(compressed_image), cv::IMREAD_COLOR);
 				//cv::cvtColor(decoded_image, image, CV_RGB2BGR);
 				image = decoded_image;
 			}
 			else
 			{
-				decoded_image = cv::imdecode(cv::Mat(compressed_image), CV_LOAD_IMAGE_GRAYSCALE);
+			  decoded_image = cv::imdecode(cv::Mat(compressed_image), cv::IMREAD_GRAYSCALE);
 				image = decoded_image;
 			}
 		}

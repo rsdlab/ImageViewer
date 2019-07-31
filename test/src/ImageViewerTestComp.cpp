@@ -1,6 +1,6 @@
 ﻿// -*- C++ -*-
 /*!
- * @file ImageViewerComp.cpp
+ * @file ImageViewerTestComp.cpp
  * @brief Standalone component
  * @date $Date$
  *
@@ -11,16 +11,16 @@
 #include <iostream>
 #include <string>
 #include <stdlib.h>
-#include "ImageViewer.h"
+#include "ImageViewerTest.h"
 
 
 void MyModuleInit(RTC::Manager* manager)
 {
-  ImageViewerInit(manager);
+  ImageViewerTestInit(manager);
   RTC::RtcBase* comp;
 
   // Create a component
-  comp = manager->createComponent("ImageViewer");
+  comp = manager->createComponent("ImageViewerTest");
 
   if (comp==NULL)
   {

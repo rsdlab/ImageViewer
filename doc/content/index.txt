@@ -1,4 +1,4 @@
-ImageViewerName - English
+﻿ImageViewerName - English
 ========================
 
 .. toctree::
